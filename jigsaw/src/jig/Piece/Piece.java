@@ -10,8 +10,9 @@ import java.util.HashMap;
  * A class representing a piece by its corners 
  */
 public class Piece {
-   
-    protected ArrayList<Point2D.Double> coords = new ArrayList<>();
+
+    private ArrayList<Point2D.Double> coords = new ArrayList<>();
+    private Point2D.Double offset = new Point2D.Double(0, 0);
 
     public Piece()
     {
@@ -22,7 +23,7 @@ public class Piece {
         this.coords.add(start);
     }
 
-    public Piece(ArrayList<Point2D.Double> polyCoords)
+    public Piece(ArrayList<Point2D.Double> polyCoords, int id)
     {
         this.coords = polyCoords;
     }
@@ -37,6 +38,37 @@ public class Piece {
         return coords.toArray(new Point2D.Double[coords.size()]);
     }
 
+
+    
+    /** 
+     * Sets the new value of the offset for the piece.
+     * @param offset // The new offset
+     * 
+     */
+    
+    public void setOffset(Point2D.Double offset)
+    {
+        this.offset = offset;
+    }
+
+
+  
+    /**
+     * Adds an x and y coord to the offset
+     *   eg. 
+     *          adding offset (dx,dy) to the current offset (x,y)
+     *          Results in a new offset of (x+dx,y+dy)
+     * @param change
+     */
+    public void addOffset(Point2D.Double change)
+    {
+        this.offset.setLocation(offset.x + change.x, offset.y+change.y);
+    }
+    
+    public Point2D.Double getOffset()
+    {
+        return offset;
+    }
 
     
     
@@ -86,7 +118,7 @@ public class Piece {
         
         */
 
-
+        //TODO refactor
     
         //Count the instances of each vertex and each edge
         HashMap<Point,Integer> vertexCount   = new HashMap<>();
