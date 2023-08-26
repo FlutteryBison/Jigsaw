@@ -15,6 +15,7 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 import jig.Jigsaw;
+import jig.piece.Piece.PieceLook;
 public class JigDisp extends JPanel implements MouseInputListener{
 
     private int width;
@@ -83,42 +84,18 @@ public class JigDisp extends JPanel implements MouseInputListener{
         g2.scale(wScale, hScale);
         
 
-        Shape[] shapes = jigsaw.getSortedPieceShapes();
+        PieceLook[] pieceLooks = jigsaw.getSortedPieceLooks();
 
         for(int i=0; i<jigsaw.getNumPieces();i++){
             
-            g2.setColor(colors[i]);
-            g2.fill(shapes[i]);
+            g2.setColor(pieceLooks[i].getCol());
+            g2.fill(pieceLooks[i].getShape());
         }
 
 
     }
 
-    private Shape[] getNormalisedPolygons()
-    {
-        if(hScale == 1 && wScale == 1)
-        {
-            return jigsaw.getSortedPieceShapes();
-        }
-        //TODO handle scaling if jigsaw is different size to display
-
-        //This affine transform scales around the origin
-        // params represent first two rows of the afine transform matrix
-        // wscale   0      0   
-        //   0    hscale   0
-        //   0      0      1   
-        AffineTransform at = new AffineTransform();
-        at.scale(wScale, hScale);
-
-        Shape[] shapes = jigsaw.getSortedPieceShapes();
-        for (Shape shape : shapes) {
-            
-            //shape = new Line2D.Float(shapes[i].getPathIterator(at));
-            
-        }
-        return shapes;
-        
-    }
+    
 
 
 

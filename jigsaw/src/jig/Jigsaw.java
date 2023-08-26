@@ -9,6 +9,7 @@ import java.util.Comparator;
 import jig.generation.cutter.Cutter;
 import jig.generation.cutter.GrowCutter;
 import jig.piece.Piece;
+import jig.piece.Piece.PieceLook;
 
 
 public class Jigsaw {
@@ -48,7 +49,7 @@ public class Jigsaw {
      * 
      * @return  The shapes of all the pieces in order of when they were last clicked
      */
-    public Shape[] getSortedPieceShapes()
+    public PieceLook[] getSortedPieceLooks()
     {
 
         //Sort the Pieces into last pressed order.
@@ -58,12 +59,12 @@ public class Jigsaw {
         Arrays.sort(sortedPieces, piecePriority);
         
         //Polygon[] polys = new Polygon[numPieces];
-        Shape[] shapes = new Shape[numPieces];
+        PieceLook[] shapes = new PieceLook[numPieces];
 
 
         for(int i=0; i<numPieces; i++)
         {
-            shapes[i] = sortedPieces[i].getPieceShape();
+            shapes[i] = sortedPieces[i].getPieceLook();
         }
         
 
@@ -100,7 +101,7 @@ public class Jigsaw {
         
         ArrayList<Integer> IDs = new ArrayList<>();
         for (int i = 0; i< numPieces; i++) {
-            if(pieces[i].getPieceShape().contains(point.getX(), point.getY()))
+            if(pieces[i].getPieceLook().getShape().contains(point.getX(), point.getY()))
             {
                 IDs.add(i);
             }   

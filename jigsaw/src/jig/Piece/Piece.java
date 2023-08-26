@@ -1,10 +1,12 @@
 package jig.piece;
 
 
+import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.util.Random;
 
 
 /**
@@ -12,15 +14,58 @@ import java.awt.geom.Point2D;
  */
 public class Piece {
 
-    private Path2D.Double shape;
+    /**
+     * Class containing all the information needed to draw the shape
+     */
+    public class PieceLook{
+        private Shape shape;
+        private Color col;
+
+        public PieceLook(Shape shape,Color col)
+        {
+            this.shape = shape;
+            this.col = col;
+        }
+
+        public Shape getShape(){
+            return shape;
+        }
+        public Color getCol()
+        {
+            return col;
+        }
+    }
+
+    
+    private Path2D.Double baseShape;
     private Point2D.Double offset = new Point2D.Double(0, 0);
     private int lastPressed = 0;
 
+    private Color col;
+
+    
+
+    /**
+     * Creates a new piece with the given shape and a random color.
+     * @param shape The shape of the piece.
+     */
     public Piece(Path2D.Double shape)
     {
-        this.shape = shape;
+        this.baseShape = shape;
+        Random rand = new Random();
+        this.col = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
     }
 
+    /**
+     * Creates a new piece with the given shape and color.
+     * @param shape The Shape of the piece.
+     * @param col   The color of the piece
+     */
+    public Piece(Path2D.Double shape, Color col)
+    {
+        this.baseShape = shape;
+        this.col = col;
+    }
     
 
     
@@ -83,8 +128,10 @@ public class Piece {
      * Gets the piece shape positioned in its current position.
      * @return
      */
-    public Shape getPieceShape() {
-        return shape.createTransformedShape(AffineTransform.getTranslateInstance(offset.x, offset.y) );
+    public PieceLook getPieceLook() {
+        return new PieceLook(baseShape.createTransformedShape(AffineTransform.getTranslateInstance(offset.x, offset.y) ), col);
     }
+
+    
 
 }
