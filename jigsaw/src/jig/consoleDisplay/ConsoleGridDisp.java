@@ -1,4 +1,4 @@
-package jig.consoleDisplay;
+package jig.consoledisplay;
 
 public class ConsoleGridDisp {
     public static void dispGrid(int[][] grid)

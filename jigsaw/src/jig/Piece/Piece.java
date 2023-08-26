@@ -1,10 +1,12 @@
-package jig.Piece;
+package jig.piece;
 
 import java.awt.Point;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import jig.generation.piecegeneration.GridPiece;
 
 
 /**

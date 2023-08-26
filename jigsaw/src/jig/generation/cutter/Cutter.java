@@ -1,6 +1,6 @@
-package jig;
+package jig.generation.cutter;
 
-import jig.Piece.Piece;
+import jig.piece.Piece;
 
 public interface Cutter {
     public Piece[] cut(int height, int width, int numPieces);

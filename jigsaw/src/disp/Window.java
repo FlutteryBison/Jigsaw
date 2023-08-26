@@ -14,7 +14,7 @@ public class Window{
 
 
         
-        JigDisp jigDisp = new JigDisp(250, 250);
+        JigDisp jigDisp = new JigDisp(700, 700);
         frame.add(jigDisp);
 
         frame.setVisible(true);

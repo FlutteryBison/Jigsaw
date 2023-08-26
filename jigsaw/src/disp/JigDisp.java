@@ -47,7 +47,7 @@ public class JigDisp extends JPanel implements MouseInputListener{
         this.height = height;
         setPreferredSize(new Dimension(width,height));
 
-        jigsaw = new Jigsaw(100, 100, 12);
+        jigsaw = new Jigsaw(25, 25, 12);
 
         
         wScale = width/jigsaw.getWidth();

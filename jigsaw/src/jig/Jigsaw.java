@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import jig.Piece.Piece;
+import jig.generation.cutter.Cutter;
+import jig.generation.cutter.GrowCutter;
+import jig.piece.Piece;
 
 
 public class Jigsaw {

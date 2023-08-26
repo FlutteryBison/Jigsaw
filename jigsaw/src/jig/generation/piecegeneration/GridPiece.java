@@ -1,4 +1,4 @@
-package jig.Piece;
+package jig.generation.piecegeneration;
 
 import java.awt.Point;
 import java.util.ArrayList;

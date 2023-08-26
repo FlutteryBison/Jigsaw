@@ -1,13 +1,13 @@
-package jig;
+package jig.generation.cutter;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import jig.Piece.GridPiece;
-import jig.Piece.Piece;
-import jig.consoleDisplay.ConsoleGridDisp;
+import jig.consoledisplay.ConsoleGridDisp;
+import jig.generation.piecegeneration.GridPiece;
+import jig.piece.Piece;
 
 import java.util.Collections;
 
