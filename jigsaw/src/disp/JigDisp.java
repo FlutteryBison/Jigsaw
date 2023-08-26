@@ -8,11 +8,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
@@ -49,7 +47,7 @@ public class JigDisp extends JPanel implements MouseInputListener{
         this.height = height;
         setPreferredSize(new Dimension(width,height));
 
-        jigsaw = new Jigsaw(100, 100, 10);
+        jigsaw = new Jigsaw(100, 100, 12);
 
         
         wScale = width/jigsaw.getWidth();
@@ -85,7 +83,7 @@ public class JigDisp extends JPanel implements MouseInputListener{
         g2.scale(wScale, hScale);
         
 
-        Shape[] shapes = jigsaw.getPieceShapes();
+        Shape[] shapes = jigsaw.getSortedPieceShapes();
 
         for(int i=0; i<jigsaw.getNumPieces();i++){
             
@@ -100,7 +98,7 @@ public class JigDisp extends JPanel implements MouseInputListener{
     {
         if(hScale == 1 && wScale == 1)
         {
-            return jigsaw.getPieceShapes();
+            return jigsaw.getSortedPieceShapes();
         }
         //TODO handle scaling if jigsaw is different size to display
 
@@ -112,7 +110,7 @@ public class JigDisp extends JPanel implements MouseInputListener{
         AffineTransform at = new AffineTransform();
         at.scale(wScale, hScale);
 
-        Shape[] shapes = jigsaw.getPieceShapes();
+        Shape[] shapes = jigsaw.getSortedPieceShapes();
         for (Shape shape : shapes) {
             
             //shape = new Line2D.Float(shapes[i].getPathIterator(at));
@@ -135,11 +133,11 @@ public class JigDisp extends JPanel implements MouseInputListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int[] IDs = jigsaw.getPieceIDsAt(new Point2D.Double(e.getPoint().x / wScale, e.getPoint().y/hScale));
+        int ID = jigsaw.getTopPieceIDAt(new Point2D.Double(e.getPoint().x / wScale, e.getPoint().y/hScale));
 
-        if(IDs.length>0)
+        if(ID>=0)
         {
-            activePiece = IDs[0];
+            activePiece = ID;
             lastPoint = e.getPoint();
             System.out.println("Active Piece: " + activePiece);
         }

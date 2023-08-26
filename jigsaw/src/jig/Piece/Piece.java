@@ -1,6 +1,7 @@
 package jig.Piece;
 
 import java.awt.Point;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class Piece {
 
     private ArrayList<Point2D.Double> coords = new ArrayList<>();
     private Point2D.Double offset = new Point2D.Double(0, 0);
+    private int lastPressed = 0;
 
     public Piece()
     {
@@ -256,4 +258,43 @@ public class Piece {
         
         return returnPiece;
     }
+
+    public int getLastPressed(){
+        return lastPressed;
+    }
+    /**
+     * Sets the last pressed property if the new value is greater than the last.
+     * Otherwise leaves it unaltered
+     * @param lastPressed
+     */
+    public void setLastPressed(int lastPressed)
+    {   if(lastPressed > this.lastPressed)
+        {
+            this.lastPressed = lastPressed;
+    
+        }
+    }
+
+    
+    public Path2D.Double getPieceShape() {
+        Path2D.Double path = new Path2D.Double();
+
+        Point2D.Double offset = getOffset();
+
+        Point2D.Double[] corners = getPieceCorners();
+        
+
+        path.moveTo(corners[0].x + offset.x, corners[0].y + offset.y);
+
+        for(int j = 0; j<corners.length; j++)
+        {
+            path.lineTo(corners[j].x + offset.x, corners[j].y+offset.y);
+
+        }
+        path.closePath();
+
+        
+        return path;
+    }
+
 }
