@@ -113,7 +113,7 @@ public class GrowCutter implements Cutter{
         //convert the grid cell visualisation to a piece using GridPiece
         for(int i = 0; i<pieceCells.length; i++)
         {
-            pieces[i] = Piece.convertToPiece(new GridPiece(pieceCells[i]));
+            pieces[i] = new GridPiece(pieceCells[i]).convertToPiece();
         }
 
 

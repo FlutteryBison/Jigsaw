@@ -1,7 +1,6 @@
 package jig;
 
 import java.awt.Shape;
-import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,16 +58,16 @@ public class Jigsaw {
         Arrays.sort(sortedPieces, piecePriority);
         
         //Polygon[] polys = new Polygon[numPieces];
-        Path2D.Double[] paths = new Path2D.Double[numPieces];
+        Shape[] shapes = new Shape[numPieces];
 
 
         for(int i=0; i<numPieces; i++)
         {
-            paths[i] = sortedPieces[i].getPieceShape();
+            shapes[i] = sortedPieces[i].getPieceShape();
         }
         
 
-        return paths;
+        return shapes;
     }
 
     public int getNumPieces(){
