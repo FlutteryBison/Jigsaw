@@ -5,11 +5,11 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import directions.RandomDirection;
 import jig.consoledisplay.ConsoleGridDisp;
 import jig.generation.piecegeneration.GridPiece;
 import jig.piece.Piece;
 
-import java.util.Collections;
 
 public class GrowCutter implements Cutter{
 
@@ -22,24 +22,10 @@ public class GrowCutter implements Cutter{
     //Each jigsaw piece has an array list of grid cells that it currently contains
     private ArrayList<Point>[] pieceCells;
 
-    //Direction can be added to a point to move in one of the 4 caridinal directions
-    private Point[] directions;
-    //Perm is used to index into direction.
-    //It contains indecies into directions and can be shuffled before use to give a random direction.
-    private ArrayList<Integer> perm;
+    
 
     public GrowCutter(){
-        directions = new Point[4];
-        directions[0] = new Point(0, -1);
-        directions[1] = new Point(1, 0);
-        directions[2] = new Point(0, 1);
-        directions[3] = new Point(-1, 0);
-
-        perm = new ArrayList<>();
-        for(int i=0; i<4; i++)
-        {
-            perm.add(i);
-        }
+        
     }
 
     
@@ -144,13 +130,14 @@ public class GrowCutter implements Cutter{
     private void growPiece(int pieceIndex,int growthSize)
     {
         Random rand = new Random();
+        RandomDirection rd = new RandomDirection(RandomDirection.PERM_RANDOM);
 
         for(int growIndex = 0; growIndex<growthSize; growIndex++){
             
 
             int curSize = pieceCells[pieceIndex].size();
             Point growFrom = pieceCells[pieceIndex].get(rand.nextInt(curSize));
-            Collections.shuffle(perm);
+            
 
             //Attempt to grow from the random point in each direction
             boolean validGrowth = false;
@@ -159,7 +146,8 @@ public class GrowCutter implements Cutter{
             for(int i=0; i<4 && !validGrowth; i++)
             {
                 newPoint = new Point(growFrom);
-                newPoint.translate(directions[perm.get(i)].x, directions[perm.get(i)].y);
+                Point dir = rd.getNextRandomDirection();
+                newPoint.translate(dir.x,dir.y);
                 if(isUnasigned(newPoint)){
                     grid[newPoint.x][newPoint.y] = pieceIndex;
                     pieceCells[pieceIndex].add(newPoint);
