@@ -6,6 +6,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -36,6 +37,7 @@ public class Piece {
         }
     }
 
+    private int ID;
     
     private Path2D.Double baseShape;
     private Point2D.Double offset = new Point2D.Double(0, 0);
@@ -43,17 +45,22 @@ public class Piece {
 
     private Color col;
 
+    //Stores the IDs of pieces that are directly adjacent to this one in the solved state.
+    private int[] adjacancentPieces;
+
     
 
     /**
      * Creates a new piece with the given shape and a random color.
      * @param shape The shape of the piece.
      */
-    public Piece(Path2D.Double shape)
+    public Piece(Path2D.Double shape, int ID, int[] adjacancies)
     {
         this.baseShape = shape;
         Random rand = new Random();
         this.col = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+        this.ID = ID;
+        this.adjacancentPieces = adjacancies;
     }
 
     /**
@@ -61,10 +68,11 @@ public class Piece {
      * @param shape The Shape of the piece.
      * @param col   The color of the piece
      */
-    public Piece(Path2D.Double shape, Color col)
+    public Piece(Path2D.Double shape, Color col,int ID)
     {
         this.baseShape = shape;
         this.col = col;
+        this.ID = ID;
     }
     
 
