@@ -3,6 +3,7 @@ package disp;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -48,7 +49,7 @@ public class JigDisp extends JPanel implements MouseInputListener{
         this.height = height;
         setPreferredSize(new Dimension(width,height));
 
-        jigsaw = new Jigsaw(25, 25, 12);
+        jigsaw = new Jigsaw(25, 25, 20);
 
         
         wScale = width/jigsaw.getWidth();
@@ -81,7 +82,10 @@ public class JigDisp extends JPanel implements MouseInputListener{
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(0));
         g2.scale(wScale, hScale);
+
+        
         
 
         PieceLook[] pieceLooks = jigsaw.getSortedPieceLooks();
@@ -90,6 +94,9 @@ public class JigDisp extends JPanel implements MouseInputListener{
             
             g2.setColor(pieceLooks[i].getCol());
             g2.fill(pieceLooks[i].getShape());
+            g2.setColor(Color.BLACK);
+            g2.draw(pieceLooks[i].getShape());
+            
         }
 
 
