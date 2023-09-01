@@ -1,6 +1,5 @@
 package jig;
 
-import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +7,7 @@ import java.util.Comparator;
 
 import jig.generation.cutter.Cutter;
 import jig.generation.cutter.GrowCutter;
+import jig.piece.GroupManager;
 import jig.piece.Piece;
 import jig.piece.Piece.PieceLook;
 
@@ -18,9 +18,8 @@ public class Jigsaw {
 
     private int width,height;
 
-    //The pieces that make up the jigsaw.
-    //A pieces index is its ID.
-    private Piece[] pieces;
+    //Manages the pieces and how they are grouped together
+    private GroupManager gm;
 
     //The number of turns that have past.
     //This is used for ordering of pieces.
@@ -35,7 +34,9 @@ public class Jigsaw {
 
 
         Cutter cutter = new GrowCutter();
-        pieces = cutter.cut(height, width, numPieces);
+        Piece[] pieces = cutter.cut(height, width, numPieces);
+        gm = new GroupManager(pieces);
+
         turnCounter = 0;
         
     }
@@ -53,7 +54,7 @@ public class Jigsaw {
     {
 
         //Sort the Pieces into last pressed order.
-        Piece[] sortedPieces = Arrays.copyOf(pieces, numPieces);
+        Piece[] sortedPieces = Arrays.copyOf(gm.getPieces(), numPieces);
 
         Comparator<Piece> piecePriority = Comparator.comparing(Piece::getLastPressed);
         Arrays.sort(sortedPieces, piecePriority);
@@ -97,6 +98,8 @@ public class Jigsaw {
         //Increment the turn counter to keep track of which pieces have been most recently clicked
         turnCounter++;
 
+        Piece[] pieces = gm.getPieces();
+
         //Find all the pieces at the location
         
         ArrayList<Integer> IDs = new ArrayList<>();
@@ -130,13 +133,19 @@ public class Jigsaw {
         return recentID;
     }
 
+    
     public void movePiece(int id, Point2D.Double change)
     {
-        if(id< pieces.length && id >= 0)
-        {
-            pieces[id].addOffset(change);
-        }
+        gm.moveGroupContaining(id, change);
         
+    }
+
+    /**
+     * Should be called whenever a piece is released
+     */
+    public void dropPiece()
+    {
+        gm.updateGroups();
     }
 
 

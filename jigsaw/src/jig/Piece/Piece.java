@@ -6,7 +6,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -138,6 +137,15 @@ public class Piece {
      */
     public PieceLook getPieceLook() {
         return new PieceLook(baseShape.createTransformedShape(AffineTransform.getTranslateInstance(offset.x, offset.y) ), col);
+    }
+
+    /**
+     * Returns the ID of this piece
+     * @return The ID of the piece
+     */
+    public int getID()
+    {
+        return ID;
     }
 
     

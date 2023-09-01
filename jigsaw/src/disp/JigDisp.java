@@ -9,9 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
@@ -123,7 +121,6 @@ public class JigDisp extends JPanel implements MouseInputListener{
         {
             activePiece = ID;
             lastPoint = e.getPoint();
-            System.out.println("Active Piece: " + activePiece);
         }
     }
 
@@ -133,7 +130,9 @@ public class JigDisp extends JPanel implements MouseInputListener{
     @Override
     public void mouseReleased(MouseEvent e) {
         activePiece = -1;
-        System.out.println("Active Piece: " + activePiece);
+        jigsaw.dropPiece();
+        this.revalidate();
+        this.repaint();
     }
 
 
