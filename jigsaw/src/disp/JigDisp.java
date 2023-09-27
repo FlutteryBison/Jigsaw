@@ -129,8 +129,8 @@ public class JigDisp extends JPanel implements MouseInputListener{
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        jigsaw.dropPiece(activePiece);
         activePiece = -1;
-        jigsaw.dropPiece();
         this.revalidate();
         this.repaint();
     }

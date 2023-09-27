@@ -106,7 +106,7 @@ public class Jigsaw {
         for (int i = 0; i< numPieces; i++) {
             if(pieces[i].getPieceLook().getShape().contains(point.getX(), point.getY()))
             {
-                IDs.add(i);
+                IDs.add(pieces[i].getID());
             }   
         }
 
@@ -143,9 +143,9 @@ public class Jigsaw {
     /**
      * Should be called whenever a piece is released
      */
-    public void dropPiece()
+    public void dropPiece(int pieceID)
     {
-        gm.updateGroups();
+        gm.updateGroupContaining(pieceID);
     }
 
 

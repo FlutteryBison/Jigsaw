@@ -148,6 +148,10 @@ public class Piece {
         return ID;
     }
 
+    public int[] getAdjacentPieces(){
+        return adjacancentPieces;
+    }
+
     
 
 }
