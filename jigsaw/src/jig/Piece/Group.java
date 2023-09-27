@@ -1,5 +1,6 @@
 package jig.piece;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,13 +51,22 @@ public class Group {
      * Merges group g into this one.
      * All the pieces in group g are added to this group.
      * All the Adjacency inforamtion is combined with this one.
+     * The offsets of the pieces in g are set to equal the offsets of this group to align the pieces perfectly
      * @param g //The group to merge into this one.
      */
     public void mergeGroup(Group g)
     {
-           this.pieces.putAll(g.getPieces());
+        //move the pieces in the old group to the same offset as this one
+        Point2D.Double oldOffset = g.getOffset();
+        Point2D.Double curOffset = getOffset();
+        Point2D.Double mov = new Point2D.Double(curOffset.x - oldOffset.x, curOffset.y - oldOffset.y);
+        g.moveGroup(mov);
+        getOffset().distance(oldOffset);
 
-           Integer[] adjs = g.getGroupAdjacancentPieces();
+        
+        this.pieces.putAll(g.getPieces());
+
+        Integer[] adjs = g.getGroupAdjacancentPieces();
 
            //Only store that a piece is adjacent to the group once
            for (Integer i : adjs) {
