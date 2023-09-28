@@ -18,13 +18,15 @@ public class Piece {
      * Class containing all the information needed to draw the shape
      */
     public class PieceLook{
+        private int ID;  //The ID of the shape piece it belongs to.
         private Shape shape;
         private Color col;
 
-        public PieceLook(Shape shape,Color col)
+        public PieceLook(Shape shape,Color col, int ID)
         {
             this.shape = shape;
             this.col = col;
+            this.ID = ID;
         }
 
         public Shape getShape(){
@@ -34,13 +36,15 @@ public class Piece {
         {
             return col;
         }
+        public int getID(){
+            return ID;
+        }
     }
 
     private int ID;
     
     private Path2D.Double baseShape;
     private Point2D.Double offset = new Point2D.Double(0, 0);
-    private int lastPressed = 0;
 
     private Color col;
 
@@ -107,36 +111,13 @@ public class Piece {
     }
 
     
-    
-
-   
-    /**
-     * Get the value of when this piece was last pressed
-     * @return
-     */
-    public int getLastPressed(){
-        return lastPressed;
-    }
-
-    /**
-     * Sets the last pressed property if the new value is greater than the last.
-     * Otherwise leaves it unaltered
-     * @param lastPressed
-     */
-    public void setLastPressed(int lastPressed)
-    {   if(lastPressed > this.lastPressed)
-        {
-            this.lastPressed = lastPressed;
-    
-        }
-    }
 
     /**
      * Gets the piece shape positioned in its current position.
      * @return
      */
     public PieceLook getPieceLook() {
-        return new PieceLook(baseShape.createTransformedShape(AffineTransform.getTranslateInstance(offset.x, offset.y) ), col);
+        return new PieceLook(baseShape.createTransformedShape(AffineTransform.getTranslateInstance(offset.x, offset.y) ), col, ID);
     }
 
     /**

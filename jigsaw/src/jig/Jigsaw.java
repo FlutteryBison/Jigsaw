@@ -1,9 +1,7 @@
 package jig;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 
 import jig.generation.cutter.Cutter;
 import jig.generation.cutter.GrowCutter;
@@ -21,9 +19,7 @@ public class Jigsaw {
     //Manages the pieces and how they are grouped together
     private GroupManager gm;
 
-    //The number of turns that have past.
-    //This is used for ordering of pieces.
-    private int turnCounter;
+    
 
 
     public Jigsaw(int width, int height, int numPieces)
@@ -36,8 +32,6 @@ public class Jigsaw {
         Cutter cutter = new GrowCutter();
         Piece[] pieces = cutter.cut(height, width, numPieces);
         gm = new GroupManager(pieces);
-
-        turnCounter = 0;
         
     }
 
@@ -54,21 +48,8 @@ public class Jigsaw {
     {
 
         //Sort the Pieces into last pressed order.
-        Piece[] sortedPieces = Arrays.copyOf(gm.getPieces(), numPieces);
-
-        Comparator<Piece> piecePriority = Comparator.comparing(Piece::getLastPressed);
-        Arrays.sort(sortedPieces, piecePriority);
-        
-        //Polygon[] polys = new Polygon[numPieces];
-        PieceLook[] shapes = new PieceLook[numPieces];
-
-
-        for(int i=0; i<numPieces; i++)
-        {
-            shapes[i] = sortedPieces[i].getPieceLook();
-        }
-        
-
+        PieceLook[] shapes = Arrays.copyOf(gm.getSortedPieceLooks(), numPieces);
+ 
         return shapes;
     }
 
@@ -95,42 +76,15 @@ public class Jigsaw {
      */ 
     public int getTopPieceIDAt(Point2D point)
     {
-        //Increment the turn counter to keep track of which pieces have been most recently clicked
-        turnCounter++;
-
-        Piece[] pieces = gm.getPieces();
-
-        //Find all the pieces at the location
-        
-        ArrayList<Integer> IDs = new ArrayList<>();
-        for (int i = 0; i< numPieces; i++) {
-            if(pieces[i].getPieceLook().getShape().contains(point.getX(), point.getY()))
+        PieceLook[] pieces = gm.getSortedPieceLooks();
+        for (PieceLook pieceLook : pieces) {
+            if(pieceLook.getShape().contains(point))
             {
-                IDs.add(pieces[i].getID());
-            }   
-        }
-
-        //Vars to store the ID of the piece that was most recently clicked
-        int recentID =-1;
-        int highestTurn = -1;
-
-        //Find the ID of the piece that was most recently clicked
-        for(int i = 0; i < IDs.size(); i++) {
-            if (IDs.get(i) != null) {
-                int lastPressed = pieces[IDs.get(i)].getLastPressed();
-                if(lastPressed>highestTurn){
-                    highestTurn = lastPressed;
-                    recentID = IDs.get(i);
-                }
+                return pieceLook.getID();
             }
         }
+        return -1;
 
-        //Update the top piece last pressed value as it has just been pressed
-        if(recentID!=-1)
-        {
-            pieces[recentID].setLastPressed(turnCounter);
-        }
-        return recentID;
     }
 
     

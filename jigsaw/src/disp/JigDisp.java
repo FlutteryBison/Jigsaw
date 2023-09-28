@@ -88,7 +88,7 @@ public class JigDisp extends JPanel implements MouseInputListener{
 
         PieceLook[] pieceLooks = jigsaw.getSortedPieceLooks();
 
-        for(int i=0; i<jigsaw.getNumPieces();i++){
+        for(int i=jigsaw.getNumPieces()-1; i>=0;i--){
             
             g2.setColor(pieceLooks[i].getCol());
             g2.fill(pieceLooks[i].getShape());

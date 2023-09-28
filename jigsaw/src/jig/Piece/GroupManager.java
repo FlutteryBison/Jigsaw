@@ -3,7 +3,7 @@ package jig.piece;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
+import jig.piece.Piece.PieceLook;
 
 import java.awt.geom.Point2D;
 
@@ -14,9 +14,12 @@ import java.awt.geom.Point2D;
  */
 public class GroupManager {
 
+    
+    //TODO touching threshold should be dependent on puzzle size
     private double touchingThreshold = 0.2;
 
-    //groups
+    //groups of pieces that have been connected and should be moved as one.
+    //This list is ordered by which piece was most recently moved.
     private ArrayList<Group> groups = new ArrayList<>();
     
     //TODO put pieces in the same group if they are close enough
@@ -46,8 +49,15 @@ public class GroupManager {
      */
     public void moveGroupContaining(int id, Point2D.Double change){
         Group group = getGroupContaining(id);
+        
         if(group!=null)
         {
+            //maintain correct oredering of the list.
+            //As the group was the most recently moved, if it is not at  index 0, move it to index 0
+            if(groups.indexOf(group)!=0){
+                groups.remove(group);
+                groups.add(0, group);
+            }
             group.moveGroup(change);
         }
         
@@ -111,18 +121,24 @@ public class GroupManager {
     
     
     /**
-     * Returns all the pieces in the jigsaw
-     * @return
+     * Returns all the pieces in the jigsaw sorted by which was moved most recently.
+     * ie. piece at index 0 is the most recently moved piece and piece at size-1 is the least recently moved piece
+     * @return  all pieces sorted by last moved.
      */
-    public Piece[] getPieces()
+    public PieceLook[] getSortedPieceLooks()
     {
         ArrayList<Piece> allPieces = new ArrayList<>();
         for (Group group : groups) {
             
             allPieces.addAll(group.getPieces().values());
         }
+        PieceLook[] pieceLooks = new PieceLook[allPieces.size()];
+        
+        for (int i = 0; i < allPieces.size(); i++) {
+            pieceLooks[i] = allPieces.get(i).getPieceLook();
+        }
 
-        return allPieces.toArray(new Piece[allPieces.size()]);
+        return pieceLooks;
     }
 
 
