@@ -1,6 +1,5 @@
 package jig.piece;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,12 +67,14 @@ public class Group {
 
         Integer[] adjs = g.getGroupAdjacancentPieces();
 
-           //Only store that a piece is adjacent to the group once
-           for (Integer i : adjs) {
+        //Only store that a piece is adjacent to the group once
+        for (Integer i : adjs) {
             if(!groupAdjacancentPieces.contains(i)){
                 groupAdjacancentPieces.add(i);
             }
         }
+
+        groupAdjacancentPieces.removeAll(pieces.keySet());
     }
 
     /**
@@ -110,7 +111,7 @@ public class Group {
     public boolean containsAny(Integer[] pieceIDs)
     {
         for (Integer ID : pieceIDs) {
-            if(groupAdjacancentPieces.contains(ID))
+            if(pieces.keySet().contains(ID))
             {
                 return true;
             }
