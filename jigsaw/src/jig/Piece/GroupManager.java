@@ -14,9 +14,8 @@ import java.awt.geom.Point2D;
  */
 public class GroupManager {
 
-    
-    //TODO touching threshold should be dependent on puzzle size
-    private double touchingThreshold = 0.2;
+    //How close adjacent pieces have to be to be considered merge their groups together
+    private final double touchingThreshold;
 
     //groups of pieces that have been connected and should be moved as one.
     //This list is ordered by which piece was most recently moved.
@@ -27,7 +26,7 @@ public class GroupManager {
      * Constructs a new Group Manager with the pieces
      * @param pieces
      */
-    public GroupManager(Piece[] pieces)
+    public GroupManager(Piece[] pieces, int width, int height)
     {
         //For now just put each piece in its own group at the start
 
@@ -36,6 +35,8 @@ public class GroupManager {
             g.addPiece(piece);
             groups.add(g);
         }
+
+        touchingThreshold = (width+height)/100.0;
     }
 
 
@@ -112,7 +113,6 @@ public class GroupManager {
             }
 
         }
-        System.out.println("Released p ID: " + pieceID);
 
 
     }

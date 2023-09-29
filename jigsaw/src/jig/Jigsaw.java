@@ -35,7 +35,7 @@ public class Jigsaw {
         Cutter cutter = new GrowCutter();
         Piece[] pieces = cutter.cut(height, width, numPieces);
         shuffle(pieces);
-        gm = new GroupManager(pieces);
+        gm = new GroupManager(pieces,width,height);
         
     }
 
