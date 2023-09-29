@@ -1,7 +1,10 @@
 package jig;
 
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
+import java.util.Random;
 
 import jig.generation.cutter.Cutter;
 import jig.generation.cutter.GrowCutter;
@@ -31,8 +34,43 @@ public class Jigsaw {
 
         Cutter cutter = new GrowCutter();
         Piece[] pieces = cutter.cut(height, width, numPieces);
+        shuffle(pieces);
         gm = new GroupManager(pieces);
         
+    }
+
+    /**
+     * Puts each piece in a random location.
+     * 
+     * @param pieces //The pieces to be shuffled.
+     */
+    private void shuffle(Piece[] pieces)
+    {
+        Rectangle2D screenRect = new Rectangle(width, height);
+        Random rand = new Random(System.currentTimeMillis());
+        for (Piece piece : pieces) {
+
+            Rectangle2D transBounds;
+            Point2D.Double randLoc;
+            Rectangle2D bounds;
+
+            do{
+                randLoc = new Point2D.Double(rand.nextDouble()*width, rand.nextDouble()*height);
+
+                bounds = piece.getPieceLook().getShape().getBounds2D();
+                double xDist = bounds.getCenterX() - randLoc.x;
+                double yDist = bounds.getCenterY() - randLoc.y;
+                transBounds = new Rectangle2D.Double(bounds.getMinX() - xDist, bounds.getMinY() - yDist, bounds.getWidth(), bounds.getHeight());
+                
+                //Check the translating bounding box is within the window
+
+            }while(!screenRect.contains(transBounds) && !screenRect.intersects(transBounds));
+
+            Point2D.Double cent = new Point2D.Double(bounds.getCenterX(),bounds.getCenterY());
+            Point2D.Double offset = new Point2D.Double(randLoc.x - cent.x, randLoc.y - cent.y);
+            piece.setOffset(offset);
+            
+        }
     }
 
 
