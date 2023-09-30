@@ -11,7 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.Random;
 
 import jig.Jigsaw;
 import jig.piece.Piece.PieceLook;
@@ -22,11 +21,9 @@ public class JigDisp extends JPanel implements MouseInputListener{
 
     private Jigsaw jigsaw;
 
-    private Color[] colors;
-
-    private Random rand = new Random();
-
+    //variables to transform between jigsaw size and screen size
     private double wScale = 1, hScale = 1;
+    private double xTranslate = 0, yTranslate = 0;
 
     private int activePiece = -1;
 
@@ -49,24 +46,19 @@ public class JigDisp extends JPanel implements MouseInputListener{
 
         jigsaw = new Jigsaw(25, 25, 20);
 
+        //the scale between the size of the jigsaw and the size of the window.
+        //Only give the jigsaw 80% of the space to leave a border around the edge and space for solving.
+        //Translate to keep leave the spare 20% as a border.
+        wScale = (width*0.8)/jigsaw.getWidth();
+        hScale = (height*0.8)/jigsaw.getHeight();
+        xTranslate = width*0.1;
+        yTranslate = height*0.1;
         
-        wScale = width/jigsaw.getWidth();
-        hScale = height/jigsaw.getHeight();
+
 
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
 
-        
-        
-        
-
-
-        colors = new Color[jigsaw.getNumPieces()];
-
-        for(int i=0; i<jigsaw.getNumPieces(); i++){
-
-            colors[i] = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
-        }
         
     }
 
@@ -81,13 +73,13 @@ public class JigDisp extends JPanel implements MouseInputListener{
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(0));
+        g2.translate(xTranslate, yTranslate);
         g2.scale(wScale, hScale);
 
         
-        
-
         PieceLook[] pieceLooks = jigsaw.getSortedPieceLooks();
 
+        //Draw in reverse order so the most recently moved pieces are on top.
         for(int i=jigsaw.getNumPieces()-1; i>=0;i--){
             
             g2.setColor(pieceLooks[i].getCol());
@@ -115,7 +107,8 @@ public class JigDisp extends JPanel implements MouseInputListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int ID = jigsaw.getTopPieceIDAt(new Point2D.Double(e.getPoint().x / wScale, e.getPoint().y/hScale));
+         Point2D.Double p = new Point2D.Double(((e.getPoint().x - xTranslate) / wScale) , (e.getPoint().y - yTranslate)/hScale);
+        int ID = jigsaw.getTopPieceIDAt(p);
 
         if(ID>=0)
         {
