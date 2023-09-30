@@ -46,28 +46,28 @@ public class Jigsaw {
      */
     private void shuffle(Piece[] pieces)
     {
-        Rectangle2D screenRect = new Rectangle(width, height);
         Random rand = new Random(System.currentTimeMillis());
         for (Piece piece : pieces) {
 
-            Rectangle2D transBounds;
+            //Bounding box for the piece
+            Rectangle2D bounds = piece.getPieceLook().getShape().getBounds2D();
+
+            //The random location to move the piece to
             Point2D.Double randLoc;
-            Rectangle2D bounds;
 
-            do{
-                randLoc = new Point2D.Double(rand.nextDouble()*width, rand.nextDouble()*height);
+            //maximum x and y locations that that the piece can go at and be fully onscreen
+            //these coordinates refer to the top left corner of the bounding box
+            // the minimum x y coordinate is is always (0,0) as that would place the upper left corner of the bounding box in the upper left corner of the screen
+            double maxX = width  - bounds.getWidth();
+            double maxY = height - bounds.getHeight();
+            
 
-                bounds = piece.getPieceLook().getShape().getBounds2D();
-                double xDist = bounds.getCenterX() - randLoc.x;
-                double yDist = bounds.getCenterY() - randLoc.y;
-                transBounds = new Rectangle2D.Double(bounds.getMinX() - xDist, bounds.getMinY() - yDist, bounds.getWidth(), bounds.getHeight());
-                
-                //Check the translating bounding box is within the window
+            //Choose a random location for the upper left corner where the bounding box is entirely withing the puzzle width
+            randLoc = new Point2D.Double(rand.nextDouble()*maxX, rand.nextDouble()*maxY);
 
-            }while(!screenRect.contains(transBounds) && !screenRect.intersects(transBounds));
-
-            Point2D.Double cent = new Point2D.Double(bounds.getCenterX(),bounds.getCenterY());
-            Point2D.Double offset = new Point2D.Double(randLoc.x - cent.x, randLoc.y - cent.y);
+            //Pieces work with offsets from their original position
+            //Calculate the offset the will move the piece to the desired location
+            Point2D.Double offset = new Point2D.Double(randLoc.x - bounds.getMinX(), randLoc.y - bounds.getMinY());
             piece.setOffset(offset);
             
         }
