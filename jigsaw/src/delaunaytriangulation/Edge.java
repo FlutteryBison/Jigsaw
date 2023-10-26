@@ -11,6 +11,11 @@ public class Edge {
     Point p1;
     Point p2;
 
+    public Edge(Point p1, Point p2) {
+        this.p1 = p1;
+        this.p2 = p2;
+    }
+
     public Point getP1() {
         return this.p1;
     }
@@ -28,10 +33,6 @@ public class Edge {
     }
     
 
-    public Edge(Point p1, Point p2) {
-        this.p1 = p1;
-        this.p2 = p2;
-    }
 
     public boolean isEndPoint(Point p)
     {
@@ -53,7 +54,15 @@ public class Edge {
 
     @Override
     public int hashCode() {
-        return Objects.hash(p1, p2);
+        //order doesnt matter so cannot just hash the points directly.
+        //two edges e1 and e2 in the case that
+        //e1.p1 == e2.p2 && e1.p2 == e2.p1 
+        //the hash will be as when
+        //e1.p1 == e2.p1 && e1.p2 == e2.p2 
+        return Objects.hash(
+            new Point(Math.min(p1.x, p2.x),Math.min(p1.y, p2.y)), 
+            new Point(Math.max(p1.x, p2.x),Math.max(p1.y, p2.y))
+            );
     }
 
     @Override
