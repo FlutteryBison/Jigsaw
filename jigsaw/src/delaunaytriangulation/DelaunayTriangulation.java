@@ -10,8 +10,8 @@ import java.util.Iterator;
  */
 public class DelaunayTriangulation {
 
-    //The triangles that make up the Delauney diagram.
-    Triangle[] tris;
+    //The triangles that make up the Delauney diagram store as the more generic EdgePolygon.
+    EdgePolygon[] tris;
 
     //The Edges that make up the delauney diagram
     Edge[] edges;
@@ -93,7 +93,12 @@ public class DelaunayTriangulation {
         
         }
 
-        this.tris = tris.toArray(new Triangle[tris.size()]);
+        //store triangles
+        this.tris = new EdgePolygon[tris.size()];
+        for(int i=0; i<tris.size(); i++)
+        {
+            this.tris[i] = new EdgePolygon(tris.get(i).getPoints());
+        }
 
         initEdges();
 
@@ -166,11 +171,13 @@ public class DelaunayTriangulation {
         return outerPoly;
     }
 
+
+
     //Stores all the edges from triangles in edges, edges are only stored once.
     private void initEdges()
     {
         ArrayList<Edge> tempEdges = new ArrayList<>();
-        for (Triangle tri : tris) {
+        for (EdgePolygon tri : tris) {
             Edge[] e = tri.getEdges();
             for(int i =0; i<3; i++)
             {
@@ -191,7 +198,7 @@ public class DelaunayTriangulation {
         return edges;
     }
 
-    public Triangle[] getTriangles()
+    public EdgePolygon[] getTriangles()
     {
         return tris;
     }
