@@ -5,16 +5,26 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import jig.generation.cutter.graphcutting.PointsConnector;
+import shape.Circle;
+import shape.EdgePolygon;
+import shape.Triangle;
+
 /**
  * Class that completes delaney triangulation on a set of points
  */
-public class DelaunayTriangulation {
+public class DelaunayTriangulation implements PointsConnector{
 
     //The triangles that make up the Delauney diagram store as the more generic EdgePolygon.
-    EdgePolygon[] tris;
+    private EdgePolygon[] tris;
 
     //The Edges that make up the delauney diagram
-    Edge[] edges;
+    private Edge[] edges;
+    
+    private ArrayList<Point> points = new ArrayList<>();
+    private Rectangle boundingbox;
+
+    private boolean triangulation_complete = false;
 
 
     /**
@@ -24,7 +34,10 @@ public class DelaunayTriangulation {
      * @param boundingBox   //A rectangle that contains all the points.
      */
     public DelaunayTriangulation(Point[] points, Rectangle boundingBox){
-        triangulation(points, boundingBox);
+        for (Point p : points) {
+            this.points.add(p);
+        }
+        this.boundingbox = boundingBox;
     }
 
     /**
@@ -32,7 +45,15 @@ public class DelaunayTriangulation {
      * @param points //The points to complete the triangulation with.
      */
     public DelaunayTriangulation(Point[] points){
-        triangulation(points, getBoundingBox(points));
+        for (Point p : points) {
+            this.points.add(p);
+        }
+        this.boundingbox = getBoundingBox(points);
+    }
+    public DelaunayTriangulation()
+    {
+        //may mean bounding box is much larger as will start at 0,0, but doesnt affect performance.
+        this.boundingbox = new Rectangle();
     }
 
     /**
@@ -52,6 +73,17 @@ public class DelaunayTriangulation {
         }
 
         return boundingBox;
+    }
+
+
+    @Override
+    public void connectPoints() {
+        //Only complete the triangulation if it has not already been done with the current set of points
+        if(!triangulation_complete)
+        {
+            triangulation(points.toArray(new Point[points.size()]), boundingbox);
+            triangulation_complete = true;
+        }
     }
 
     /**
@@ -101,6 +133,7 @@ public class DelaunayTriangulation {
         }
 
         initEdges();
+        triangulation_complete = true;
 
     }
 
@@ -193,14 +226,58 @@ public class DelaunayTriangulation {
     }
 
 
-    public Edge[] getEdges()
-    {
-        return edges;
-    }
+    
 
     public EdgePolygon[] getTriangles()
     {
         return tris;
+    }
+
+    
+
+    
+
+    @Override
+    public void addPoint(Point point) {
+        points.add(point);
+        boundingbox.add(point);
+        triangulation_complete = false;
+    }
+
+    @Override
+    public void addPoints(Point[] points) {
+        for (Point point : points) {
+            this.points.add(point);
+            boundingbox.add(point);
+        }
+        triangulation_complete = false;
+    }
+
+    @Override
+    public EdgePolygon[] getShapes() {
+        if(tris ==null)
+        {
+            return new EdgePolygon[0];
+        }
+        return tris;
+    }
+    @Override
+    public Edge[] getEdges()
+    {
+        if(edges == null)
+        {
+            return new Edge[0];
+        }
+        return edges;
+    }
+
+    @Override
+    public void setPoints(Point[] points) {
+        this.points.clear();
+        for (Point point : points) {
+            this.points.add(point);
+        }
+        triangulation_complete = false;
     }
     
 }

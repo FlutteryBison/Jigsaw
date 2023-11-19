@@ -44,15 +44,15 @@ public class JigDisp extends JPanel implements MouseInputListener{
         this.height = height;
         setPreferredSize(new Dimension(width,height));
 
-        jigsaw = new Jigsaw(25, 25, 20);
+        jigsaw = new Jigsaw(width, height, 10);
 
         //the scale between the size of the jigsaw and the size of the window.
         //Only give the jigsaw 80% of the space to leave a border around the edge and space for solving.
         //Translate to keep leave the spare 20% as a border.
-        wScale = (width*0.8)/jigsaw.getWidth();
-        hScale = (height*0.8)/jigsaw.getHeight();
-        xTranslate = width*0.1;
-        yTranslate = height*0.1;
+        wScale = (width*0.9)/jigsaw.getWidth();
+        hScale = (height*0.9)/jigsaw.getHeight();
+        xTranslate = width*0.05;
+        yTranslate = height*0.05;
         
 
 
@@ -80,7 +80,7 @@ public class JigDisp extends JPanel implements MouseInputListener{
         PieceLook[] pieceLooks = jigsaw.getSortedPieceLooks();
 
         //Draw in reverse order so the most recently moved pieces are on top.
-        for(int i=jigsaw.getNumPieces()-1; i>=0;i--){
+        for(int i=pieceLooks.length-1; i>=0;i--){
             
             g2.setColor(pieceLooks[i].getCol());
             g2.fill(pieceLooks[i].getShape());

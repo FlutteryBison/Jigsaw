@@ -1,4 +1,4 @@
-package delaunaytriangulation;
+package shape;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;

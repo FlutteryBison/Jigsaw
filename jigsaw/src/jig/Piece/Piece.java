@@ -19,10 +19,10 @@ public class Piece {
      */
     public class PieceLook{
         private int ID;  //The ID of the shape piece it belongs to.
-        private Shape shape;
+        private Path2D.Float shape;
         private Color col;
 
-        public PieceLook(Shape shape,Color col, int ID)
+        public PieceLook(Path2D.Float shape,Color col, int ID)
         {
             this.shape = shape;
             this.col = col;
@@ -43,7 +43,7 @@ public class Piece {
 
     private int ID;
     
-    private Path2D.Double baseShape;
+    private Shape baseShape;
     private Point2D.Double offset = new Point2D.Double(0, 0);
 
     private Color col;
@@ -57,7 +57,7 @@ public class Piece {
      * Creates a new piece with the given shape and a random color.
      * @param shape The shape of the piece.
      */
-    public Piece(Path2D.Double shape, int ID, int[] adjacancies)
+    public Piece(Shape shape, int ID, int[] adjacancies)
     {
         this.baseShape = shape;
         Random rand = new Random();
@@ -71,7 +71,7 @@ public class Piece {
      * @param shape The Shape of the piece.
      * @param col   The color of the piece
      */
-    public Piece(Path2D.Double shape, Color col,int ID)
+    public Piece(Shape shape, Color col,int ID)
     {
         this.baseShape = shape;
         this.col = col;
@@ -117,7 +117,7 @@ public class Piece {
      * @return
      */
     public PieceLook getPieceLook() {
-        return new PieceLook(baseShape.createTransformedShape(AffineTransform.getTranslateInstance(offset.x, offset.y) ), col, ID);
+        return new PieceLook(new Path2D.Float(baseShape, AffineTransform.getTranslateInstance(offset.x, offset.y)), col, ID);
     }
 
     /**
@@ -132,6 +132,7 @@ public class Piece {
     public int[] getAdjacentPieces(){
         return adjacancentPieces;
     }
+
 
     
 

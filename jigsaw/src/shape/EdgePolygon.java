@@ -1,8 +1,10 @@
-package delaunaytriangulation;
+package shape;
 
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.HashSet;
+
+import delaunaytriangulation.Edge;
 
 /**
  * Adds some Edge functionality to 

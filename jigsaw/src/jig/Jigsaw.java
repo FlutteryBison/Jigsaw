@@ -1,13 +1,14 @@
 package jig;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.Random;
 
+import delaunaytriangulation.DelaunayTriangulation;
 import jig.generation.cutter.Cutter;
-import jig.generation.cutter.GrowCutter;
+import jig.generation.cutter.graphcutting.GraphCutter;
 import jig.piece.GroupManager;
 import jig.piece.Piece;
 import jig.piece.Piece.PieceLook;
@@ -30,10 +31,20 @@ public class Jigsaw {
         this.width = width;
         this.height = height;
         this.numPieces = numPieces;
+        Random rand = new Random(0);
 
 
-        Cutter cutter = new GrowCutter();
-        Piece[] pieces = cutter.cut(height, width, numPieces);
+        // Cutter cutter = new GrowCutter();
+        // Piece[] pieces = cutter.cut(height, width, numPieces);
+        
+        
+        //Point[] points = GraphCutter.generateRandomPoints(10, new Rectangle(width,height));
+        Point[] points = GraphCutter.generateGridPoints(4, 4, new Rectangle(width,height), 100);
+        
+        DelaunayTriangulation dt = new DelaunayTriangulation(points);
+        Cutter cutter = new GraphCutter(dt);
+        Piece[] pieces = cutter.cut(height, width, 10);
+
         shuffle(pieces);
         gm = new GroupManager(pieces,width,height);
         
@@ -50,10 +61,8 @@ public class Jigsaw {
         for (Piece piece : pieces) {
 
             //Bounding box for the piece
-            Rectangle2D bounds = piece.getPieceLook().getShape().getBounds2D();
+            Rectangle bounds = piece.getPieceLook().getShape().getBounds();
 
-            //The random location to move the piece to
-            Point2D.Double randLoc;
 
             //maximum x and y locations that that the piece can go at and be fully onscreen
             //these coordinates refer to the top left corner of the bounding box
@@ -63,7 +72,7 @@ public class Jigsaw {
             
 
             //Choose a random location for the upper left corner where the bounding box is entirely withing the puzzle width
-            randLoc = new Point2D.Double(rand.nextDouble()*maxX, rand.nextDouble()*maxY);
+            Point2D.Double randLoc = new Point2D.Double(rand.nextDouble()*maxX, rand.nextDouble()*maxY);
 
             //Pieces work with offsets from their original position
             //Calculate the offset the will move the piece to the desired location
@@ -86,14 +95,12 @@ public class Jigsaw {
     {
 
         //Sort the Pieces into last pressed order.
-        PieceLook[] shapes = Arrays.copyOf(gm.getSortedPieceLooks(), numPieces);
+        PieceLook[] pl = gm.getSortedPieceLooks();
+        PieceLook[] shapes = Arrays.copyOf(pl, pl.length);
  
         return shapes;
     }
 
-    public int getNumPieces(){
-        return numPieces;
-    }
 
     public int getWidth()
     {
@@ -141,10 +148,5 @@ public class Jigsaw {
     }
 
 
-
-
-
-
-    
     
 }

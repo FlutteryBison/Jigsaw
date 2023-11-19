@@ -1,7 +1,9 @@
-package delaunaytriangulation;
+package shape;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import delaunaytriangulation.Edge;
 
 public class Triangle {
     private Point a;
@@ -34,6 +36,7 @@ public class Triangle {
     }
 
     //TODO impliment supertriangle from point array
+    //TODO impliment smaller supertriangle
     // public static Triangle createSuperTriangle(Point[] points)
     // {
     //     return null;
@@ -70,11 +73,12 @@ public class Triangle {
         double triHeight = triWidth*Math.tan(angle)+10;
         
     
-        return new Triangle(
-            new Point( (int)Math.ceil(r.getMaxX()), (int)Math.ceil(r.getMaxY())),
-            new Point((int)Math.floor(r.getMaxX() - triWidth), (int)Math.ceil(r.getMaxY())),
-            new Point((int)Math.ceil(r.getMaxX()),(int)Math.floor((r.getMaxY()-triHeight)))
-        );
+        //move the bottom right corner down and right to ensure no points exist on the triangle boundary
+         return new Triangle(
+             new Point( (int)Math.ceil(r.getMaxX())+10, (int)Math.ceil(r.getMaxY())+10),
+             new Point((int)Math.floor(r.getMaxX() - triWidth), (int)Math.ceil(r.getMaxY())),
+             new Point((int)Math.ceil(r.getMaxX()),(int)Math.floor((r.getMaxY()-triHeight)))
+         );
 
     }
 
